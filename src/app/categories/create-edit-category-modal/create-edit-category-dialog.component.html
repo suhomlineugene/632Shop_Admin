@@ -1,0 +1,45 @@
+<form class="form-horizontal" autocomplete="off" #createEditCategoryModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="'CreateNewCategory' | localize" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="surname">
+                {{ 'Name' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="categoryName"
+                    id="categoryName"
+                    required
+                    maxlength="64"
+                    [(ngModel)]="category.name"
+                    #categoryName="ngModel"
+                    #categoryNameEl />
+                <abp-validation-summary
+                    [control]="categoryName"
+                    [controlEl]="categoryNameEl"></abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="userName">
+                {{ 'IsActive' | localize }}
+            </label>
+            <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                    <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        name="isActive"
+                        id="isActive"
+                        [(ngModel)]="category.isActive" />
+                    <label class="custom-control-label mt-2" for="isActive"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer
+        [cancelDisabled]="saving"
+        [saveDisabled]="!createEditCategoryModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

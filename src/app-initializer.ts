@@ -43,7 +43,7 @@ export class AppInitializer {
                                     const angularLocale = this.convertAbpLocaleToAngularLocale(
                                         abp.localization.currentLanguage.name
                                     );
-                                    import(`../node_modules/@angular/common/locales/${angularLocale}.mjs`).then(
+                                    this.loadLocale(angularLocale).then(
                                         (module) => {
                                             registerLocaleData(module.default);
                                             resolve(result);
@@ -182,6 +182,26 @@ export class AppInitializer {
 
             callback();
         });
+    }
+
+    private async loadLocale(locale: string): Promise<any> {
+        // Normalize locale name - replace hyphens with slashes for import paths
+        const normalizedLocale = locale.replace('-', '/');
+
+        try {
+            // Try to import the specific locale first
+            return await import(`@angular/common/locales/${normalizedLocale}`);
+        } catch {
+            try {
+                // If specific locale fails, try just the language part
+                const language = locale.split('-')[0];
+                return await import(`@angular/common/locales/${language}`);
+            } catch {
+                // Fallback to English
+                console.warn(`Locale ${locale} not found, falling back to English`);
+                return await import('@angular/common/locales/en');
+            }
+        }
     }
 
     private resolveTenancyName(appBaseUrl): string | null {

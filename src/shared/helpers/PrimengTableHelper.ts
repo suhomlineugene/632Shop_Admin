@@ -1,6 +1,6 @@
 import { LazyLoadEvent } from 'primeng/api';
 import { Paginator } from 'primeng/paginator';
-import { Table } from 'primeng/table';
+import { Table, TableLazyLoadEvent } from 'primeng/table';
 import * as rtlDetect from 'rtl-detect';
 
 export class PrimengTableHelper {
@@ -15,6 +15,8 @@ export class PrimengTableHelper {
     records: any[];
 
     isLoading = false;
+
+    isResponsive = true;
 
     showLoadingIndicator(): void {
         setTimeout(() => {
@@ -84,7 +86,7 @@ export class PrimengTableHelper {
         return event.first;
     }
 
-    shouldResetPaging(event: LazyLoadEvent): boolean {
+    shouldResetPaging(event: TableLazyLoadEvent): boolean {
         if (!event /*|| event.sortField*/) {
             // if you want to reset after sorting, comment out parameter
             return true;
