@@ -1,0 +1,49 @@
+<form class="form-horizontal" autocomplete="off" #createEditApprovalStandardModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="'CreateNewApprovalStandard' | localize"
+                      (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="standardCode">
+                {{ 'StandardCode' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="standardCode"
+                    id="standardCode"
+                    required
+                    maxlength="64"
+                    [(ngModel)]="approvalStandard.code"
+                    #standardCode="ngModel"
+                    #standardCodeEl />
+                <abp-validation-summary
+                    [control]="standardCode"
+                    [controlEl]="standardCodeEl"></abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="description">
+                {{ 'Description' | localize }}
+            </label>
+            <div class="col-md-9">
+                <textarea
+                    class="form-control"
+                    name="description"
+                    id="description"
+                    [(ngModel)]="approvalStandard.description"
+                    #description="ngModel"
+                    #descriptionEl
+                    rows="3"></textarea>
+                <abp-validation-summary
+                    [control]="description"
+                    [controlEl]="descriptionEl"></abp-validation-summary>
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer
+        [cancelDisabled]="saving"
+        [saveDisabled]="!createEditApprovalStandardModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>
+

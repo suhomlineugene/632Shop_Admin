@@ -1,0 +1,51 @@
+<form class="form-horizontal" autocomplete="off" #createEditManufacturerApprovalModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="'CreateNewManufacturerApproval' | localize"
+                      (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="approvalCode">
+                {{ 'ApprovalCode' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="approvalCode"
+                    id="approvalCode"
+                    required
+                    maxlength="64"
+                    [(ngModel)]="manufacturerApproval.code"
+                    #approvalCode="ngModel"
+                    #approvalCodeEl />
+                <abp-validation-summary
+                    [control]="approvalCode"
+                    [controlEl]="approvalCodeEl"></abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="manufacturerName">
+                {{ 'ManufacturerName' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="manufacturerName"
+                    id="manufacturerName"
+                    required
+                    maxlength="128"
+                    [(ngModel)]="manufacturerApproval.name"
+                    #manufacturerName="ngModel"
+                    #manufacturerNameEl />
+                <abp-validation-summary
+                    [control]="manufacturerName"
+                    [controlEl]="manufacturerNameEl"></abp-validation-summary>
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer
+        [cancelDisabled]="saving"
+        [saveDisabled]="!createEditManufacturerApprovalModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>
+
