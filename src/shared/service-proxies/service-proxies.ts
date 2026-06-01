@@ -497,26 +497,26 @@ export class ProductsServiceProxy {
     }
 
     /**
+     * @param fileBase64 (optional) 
      * @param fileName (optional) 
-     * @param body (optional) 
      * @return OK
      */
-    importProductsFromFile(fileName: string | undefined, body: Blob | undefined): Observable<number> {
+    importProductsFromFile(fileBase64: string | undefined, fileName: string | undefined): Observable<number> {
         let url_ = this.baseUrl + "/api/services/app/Products/ImportProductsFromFile?";
+        if (fileBase64 === null)
+            throw new globalThis.Error("The parameter 'fileBase64' cannot be null.");
+        else if (fileBase64 !== undefined)
+            url_ += "fileBase64=" + encodeURIComponent("" + fileBase64) + "&";
         if (fileName === null)
             throw new globalThis.Error("The parameter 'fileName' cannot be null.");
         else if (fileName !== undefined)
             url_ += "fileName=" + encodeURIComponent("" + fileName) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = body;
-
         let options_ : any = {
-            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
@@ -4174,11 +4174,6 @@ export interface IUserLoginInfoDto {
     surname: string | undefined;
     userName: string | undefined;
     emailAddress: string | undefined;
-}
-
-export interface FileParameter {
-    data: any;
-    fileName: string;
 }
 
 export class ApiException extends Error {

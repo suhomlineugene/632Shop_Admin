@@ -6,6 +6,10 @@
                     <h1>{{ 'Products' | localize }}</h1>
                 </div>
                 <div class="col-6 text-right">
+                    <a href="javascript: void(0)" class="btn bg-green mr-2" (click)="importProducts()">
+                        <i class="fa fa-file-import"></i>
+                        {{ 'ImportProducts' | localize }}
+                    </a>
                     <a href="javascript: void(0)" class="btn bg-blue" (click)="createOrEditProduct()">
                         <i class="fa fa-plus-square"></i>
                         {{ 'CreateProduct' | localize }}
