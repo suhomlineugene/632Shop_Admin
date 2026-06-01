@@ -27,8 +27,8 @@ import { AppComponent } from './app.component';
                         canActivate: [AppRouteGuard],
                     },
                     {
-                        path: 'categories',
-                        loadChildren: () => import('./categories/categories.module').then((m) => m.CategoriesModule),
+                        path: 'products',
+                        loadChildren: () => import('./products/products.module').then((m) => m.ProductsModule),
                         data: { permission: 'Pages.Users' },
                         canActivate: [AppRouteGuard],
                     },
@@ -55,4 +55,5 @@ import { AppComponent } from './app.component';
     ],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
