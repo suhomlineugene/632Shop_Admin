@@ -33,6 +33,16 @@ import { AppComponent } from './app.component';
                         canActivate: [AppRouteGuard],
                     },
                     {
+                        path: 'oil-approvals',
+                        loadChildren: () => import('./oil-approvals/oil-approvals.module').then((m) => m.OilApprovalsModule),
+                        canActivate: [AppRouteGuard],
+                    },
+                    {
+                        path: 'manufacturer-approvals',
+                        loadChildren: () => import('./manufacturer-approvals/manufacturer-approvals.module').then((m) => m.ManufacturerApprovalsModule),
+                        canActivate: [AppRouteGuard],
+                    },
+                    {
                         path: 'roles',
                         loadChildren: () => import('./roles/roles.module').then((m) => m.RolesModule),
                         data: { permission: 'Pages.Roles' },

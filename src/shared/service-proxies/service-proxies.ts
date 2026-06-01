@@ -141,6 +141,522 @@ export class AccountServiceProxy {
 }
 
 @Injectable()
+export class ApprovalsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return OK
+     */
+    getAllOilApprovals(): Observable<OilApprovalDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/GetAllOilApprovals";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllOilApprovals(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllOilApprovals(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<OilApprovalDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<OilApprovalDto[]>;
+        }));
+    }
+
+    protected processGetAllOilApprovals(response: HttpResponseBase): Observable<OilApprovalDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(OilApprovalDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    getOilApprovalById(id: number | undefined): Observable<OilApprovalDto> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/GetOilApprovalById?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetOilApprovalById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetOilApprovalById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<OilApprovalDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<OilApprovalDto>;
+        }));
+    }
+
+    protected processGetOilApprovalById(response: HttpResponseBase): Observable<OilApprovalDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = OilApprovalDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createOrEditOilApproval(body: CreateEditOilApprovalDto | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/CreateOrEditOilApproval";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEditOilApproval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEditOilApproval(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreateOrEditOilApproval(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    deleteOilApproval(id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/DeleteOilApproval?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteOilApproval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteOilApproval(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteOilApproval(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getStandardTypeDropdown(): Observable<StandardTypeDropdownDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/GetStandardTypeDropdown";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetStandardTypeDropdown(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetStandardTypeDropdown(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<StandardTypeDropdownDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<StandardTypeDropdownDto[]>;
+        }));
+    }
+
+    protected processGetStandardTypeDropdown(response: HttpResponseBase): Observable<StandardTypeDropdownDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(StandardTypeDropdownDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getAllManufacturerApprovals(): Observable<ManufacturerApprovalDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/GetAllManufacturerApprovals";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllManufacturerApprovals(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllManufacturerApprovals(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ManufacturerApprovalDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ManufacturerApprovalDto[]>;
+        }));
+    }
+
+    protected processGetAllManufacturerApprovals(response: HttpResponseBase): Observable<ManufacturerApprovalDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ManufacturerApprovalDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    getManufacturerApprovalById(id: number | undefined): Observable<ManufacturerApprovalDto> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/GetManufacturerApprovalById?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetManufacturerApprovalById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetManufacturerApprovalById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ManufacturerApprovalDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ManufacturerApprovalDto>;
+        }));
+    }
+
+    protected processGetManufacturerApprovalById(response: HttpResponseBase): Observable<ManufacturerApprovalDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ManufacturerApprovalDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createOrEditManufacturerApproval(body: CreateEditManufacturerApprovalDto | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/CreateOrEditManufacturerApproval";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEditManufacturerApproval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEditManufacturerApproval(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreateOrEditManufacturerApproval(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    deleteManufacturerApproval(id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Approvals/DeleteManufacturerApproval?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteManufacturerApproval(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteManufacturerApproval(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteManufacturerApproval(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class ConfigurationServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -497,19 +1013,14 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param fileName (optional) 
      * @param body (optional) 
      * @return OK
      */
-    importProductsFromFile(fileName: string | undefined, body: Blob | undefined): Observable<number> {
-        let url_ = this.baseUrl + "/api/services/app/Products/ImportProductsFromFile?";
-        if (fileName === null)
-            throw new globalThis.Error("The parameter 'fileName' cannot be null.");
-        else if (fileName !== undefined)
-            url_ += "fileName=" + encodeURIComponent("" + fileName) + "&";
+    importProductsFromFile(body: ImportProductsDto | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Products/ImportProductsFromFile";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = body;
+        const content_ = JSON.stringify(body);
 
         let options_ : any = {
             body: content_,
@@ -2395,6 +2906,116 @@ export interface IChangeUserLanguageDto {
     languageName: string;
 }
 
+export class CreateEditManufacturerApprovalDto implements ICreateEditManufacturerApprovalDto {
+    id!: number;
+    name!: string | undefined;
+    description!: string | undefined;
+    manufacturerName!: string | undefined;
+
+    constructor(data?: ICreateEditManufacturerApprovalDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.manufacturerName = _data["manufacturerName"];
+        }
+    }
+
+    static fromJS(data: any): CreateEditManufacturerApprovalDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateEditManufacturerApprovalDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["manufacturerName"] = this.manufacturerName;
+        return data;
+    }
+
+    clone(): CreateEditManufacturerApprovalDto {
+        const json = this.toJSON();
+        let result = new CreateEditManufacturerApprovalDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateEditManufacturerApprovalDto {
+    id: number;
+    name: string | undefined;
+    description: string | undefined;
+    manufacturerName: string | undefined;
+}
+
+export class CreateEditOilApprovalDto implements ICreateEditOilApprovalDto {
+    id!: number;
+    name!: string | undefined;
+    description!: string | undefined;
+    standardType!: StandardType;
+
+    constructor(data?: ICreateEditOilApprovalDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.standardType = _data["standardType"];
+        }
+    }
+
+    static fromJS(data: any): CreateEditOilApprovalDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateEditOilApprovalDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["standardType"] = this.standardType;
+        return data;
+    }
+
+    clone(): CreateEditOilApprovalDto {
+        const json = this.toJSON();
+        let result = new CreateEditOilApprovalDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateEditOilApprovalDto {
+    id: number;
+    name: string | undefined;
+    description: string | undefined;
+    standardType: StandardType;
+}
+
 export class CreateEditProductDto implements ICreateEditProductDto {
     id!: number;
     creationTime!: moment.Moment;
@@ -2931,6 +3552,53 @@ export interface IGetRoleForEditOutput {
     grantedPermissionNames: string[] | undefined;
 }
 
+export class ImportProductsDto implements IImportProductsDto {
+    fileBase64!: string | undefined;
+    fileName!: string | undefined;
+
+    constructor(data?: IImportProductsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.fileBase64 = _data["fileBase64"];
+            this.fileName = _data["fileName"];
+        }
+    }
+
+    static fromJS(data: any): ImportProductsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ImportProductsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["fileBase64"] = this.fileBase64;
+        data["fileName"] = this.fileName;
+        return data;
+    }
+
+    clone(): ImportProductsDto {
+        const json = this.toJSON();
+        let result = new ImportProductsDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IImportProductsDto {
+    fileBase64: string | undefined;
+    fileName: string | undefined;
+}
+
 export class Int64EntityDto implements IInt64EntityDto {
     id!: number;
 
@@ -3062,6 +3730,116 @@ export class IsTenantAvailableOutput implements IIsTenantAvailableOutput {
 export interface IIsTenantAvailableOutput {
     state: TenantAvailabilityState;
     tenantId: number | undefined;
+}
+
+export class ManufacturerApprovalDto implements IManufacturerApprovalDto {
+    id!: number;
+    name!: string | undefined;
+    description!: string | undefined;
+    manufacturerName!: string | undefined;
+
+    constructor(data?: IManufacturerApprovalDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.manufacturerName = _data["manufacturerName"];
+        }
+    }
+
+    static fromJS(data: any): ManufacturerApprovalDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ManufacturerApprovalDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["manufacturerName"] = this.manufacturerName;
+        return data;
+    }
+
+    clone(): ManufacturerApprovalDto {
+        const json = this.toJSON();
+        let result = new ManufacturerApprovalDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IManufacturerApprovalDto {
+    id: number;
+    name: string | undefined;
+    description: string | undefined;
+    manufacturerName: string | undefined;
+}
+
+export class OilApprovalDto implements IOilApprovalDto {
+    id!: number;
+    name!: string | undefined;
+    description!: string | undefined;
+    standardType!: StandardType;
+
+    constructor(data?: IOilApprovalDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.standardType = _data["standardType"];
+        }
+    }
+
+    static fromJS(data: any): OilApprovalDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new OilApprovalDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["standardType"] = this.standardType;
+        return data;
+    }
+
+    clone(): OilApprovalDto {
+        const json = this.toJSON();
+        let result = new OilApprovalDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IOilApprovalDto {
+    id: number;
+    name: string | undefined;
+    description: string | undefined;
+    standardType: StandardType;
 }
 
 export class PermissionDto implements IPermissionDto {
@@ -3803,6 +4581,61 @@ export interface IRoleListDtoListResultDto {
     items: RoleListDto[] | undefined;
 }
 
+export enum StandardType {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
+}
+
+export class StandardTypeDropdownDto implements IStandardTypeDropdownDto {
+    id!: number;
+    name!: string | undefined;
+
+    constructor(data?: IStandardTypeDropdownDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): StandardTypeDropdownDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StandardTypeDropdownDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): StandardTypeDropdownDto {
+        const json = this.toJSON();
+        let result = new StandardTypeDropdownDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IStandardTypeDropdownDto {
+    id: number;
+    name: string | undefined;
+}
+
 export enum TenantAvailabilityState {
     _1 = 1,
     _2 = 2,
@@ -4174,11 +5007,6 @@ export interface IUserLoginInfoDto {
     surname: string | undefined;
     userName: string | undefined;
     emailAddress: string | undefined;
-}
-
-export interface FileParameter {
-    data: any;
-    fileName: string;
 }
 
 export class ApiException extends Error {
