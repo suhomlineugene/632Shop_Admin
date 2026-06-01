@@ -1,0 +1,36 @@
+<abp-modal-header [title]="'ImportProducts' | localize" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-12">
+            <p class="text-muted mb-3">{{ 'ImportProductsDescription' | localize }}</p>
+            <p-fileUpload
+                name="importFile"
+                accept=".xlsx,.xls,.csv"
+                [maxFileSize]="10000000"
+                [customUpload]="true"
+                (uploadHandler)="onUpload($event)"
+                [disabled]="saving"
+                [chooseLabel]="'ChooseFile' | localize"
+                [uploadLabel]="'Import' | localize"
+                [cancelLabel]="'Cancel' | localize">
+                <ng-template pTemplate="content">
+                    <div class="text-center text-muted py-3" *ngIf="!saving">
+                        <i class="fas fa-file-excel fa-2x mb-2 d-block"></i>
+                        {{ 'DragAndDropFileHere' | localize }}
+                    </div>
+                    <div class="text-center py-3" *ngIf="saving">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    </div>
+                </ng-template>
+            </p-fileUpload>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()" [disabled]="saving">
+        {{ 'Cancel' | localize }}
+    </button>
+</div>
+

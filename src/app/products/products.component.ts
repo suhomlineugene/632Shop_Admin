@@ -15,6 +15,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import {
     CreateEditProductDialogComponent,
 } from '@app/products/create-edit-product-modal/create-edit-product-dialog.component';
+import {
+    ImportProductsDialogComponent,
+} from '@app/products/import-products-modal/import-products-dialog.component';
 
 @Component({
     templateUrl: './products.component.html',
@@ -92,6 +95,18 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
                 }
             },
         );
+    }
+
+    public importProducts(): void {
+        const importDialog: BsModalRef = this._modalService.show(ImportProductsDialogComponent, {
+            class: 'modal-lg',
+        });
+
+        if (importDialog.content && importDialog.content.onSave) {
+            importDialog.content.onSave.subscribe(() => {
+                this.getProducts();
+            });
+        }
     }
 
     public createOrEditProduct(product?: ProductDto) {
