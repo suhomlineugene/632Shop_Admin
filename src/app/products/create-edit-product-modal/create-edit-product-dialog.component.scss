@@ -1,0 +1,43 @@
+/* Create/Edit Product Dialog Styles */
+
+.form-horizontal {
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    label.col-form-label {
+        font-weight: 500;
+        padding-top: 0.625rem;
+    }
+
+    .required {
+        label::after {
+            content: '*';
+            color: #dc3545;
+            margin-left: 0.25rem;
+        }
+    }
+
+    .form-control {
+        &:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    .checkbox label {
+        display: flex;
+        align-items: center;
+        margin: 0;
+
+        input[type="checkbox"] {
+            margin-right: 0.5rem;
+            margin-top: 0;
+        }
+    }
+}
+
