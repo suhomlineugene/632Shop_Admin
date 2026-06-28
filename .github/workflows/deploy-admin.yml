@@ -38,7 +38,7 @@ jobs:
       # ── Build ────────────────────────────────────────────────────────────────
       # If your Angular CLI is very old (< v6), use: npm run build -- --prod
       - name: Build production bundle
-        run: npm run build -- --configuration production
+        run: npm run ng -- build --configuration production
         env:
           # Prevent out-of-memory kills on GitHub Actions runners
           NODE_OPTIONS: "--max_old_space_size=4096"
