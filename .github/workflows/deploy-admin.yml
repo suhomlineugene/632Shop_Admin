@@ -1,0 +1,97 @@
+name: Deploy Admin Panel
+
+on:
+  push:
+    branches: [main]
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+# Required for OIDC token (keyless AWS auth — no stored secrets)
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  NODE_VERSION: "18"
+  AWS_REGION: "us-east-1"
+
+jobs:
+  build-and-deploy:
+    name: Build Angular → Deploy to S3
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ────────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Node / npm ──────────────────────────────────────────────────────────
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Build ────────────────────────────────────────────────────────────────
+      # If your Angular CLI is very old (< v6), use: npm run build -- --prod
+      - name: Build production bundle
+        run: npm run build -- --configuration production
+        env:
+          # Prevent out-of-memory kills on GitHub Actions runners
+          NODE_OPTIONS: "--max_old_space_size=4096"
+
+      # ── Find the dist folder ─────────────────────────────────────────────────
+      # Angular CLI outputs to dist/<project-name>/. This step finds it automatically.
+      - name: Locate dist folder
+        id: dist
+        run: |
+          # Check for a nested dist/<name>/ (Angular 6+) or flat dist/ (older)
+          DIST_DIR=$(find dist -mindepth 0 -maxdepth 1 -type d | tail -1)
+          echo "path=$DIST_DIR" >> "$GITHUB_OUTPUT"
+          echo "Deploying from: $DIST_DIR"
+          ls "$DIST_DIR"
+
+      # ── AWS Auth (OIDC — no stored AWS keys) ─────────────────────────────────
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # ── Deploy to S3 ─────────────────────────────────────────────────────────
+      # Two-pass upload strategy:
+      #   Pass 1 — assets with content-hash filenames → cache 1 year (immutable)
+      #   Pass 2 — index.html → no-cache so new deployments propagate instantly
+      - name: Upload hashed assets to S3 (long cache)
+        run: |
+          aws s3 sync "${{ steps.dist.outputs.path }}/" \
+            "s3://${{ secrets.S3_BUCKET }}/" \
+            --delete \
+            --exclude "index.html" \
+            --cache-control "public,max-age=31536000,immutable"
+
+      - name: Upload index.html (no cache)
+        run: |
+          aws s3 cp "${{ steps.dist.outputs.path }}/index.html" \
+            "s3://${{ secrets.S3_BUCKET }}/index.html" \
+            --cache-control "no-cache,no-store,must-revalidate" \
+            --content-type "text/html"
+
+      # ── Invalidate CloudFront ─────────────────────────────────────────────────
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/index.html"
+
+      # ── Summary ──────────────────────────────────────────────────────────────
+      - name: Deployment summary
+        run: |
+          echo "### ✅ Admin panel deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Bucket:** ${{ secrets.S3_BUCKET }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **CloudFront:** ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
