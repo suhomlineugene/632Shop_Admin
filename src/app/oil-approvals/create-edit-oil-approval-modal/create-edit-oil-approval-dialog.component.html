@@ -1,0 +1,85 @@
+<form class="form-horizontal" autocomplete="off" #createEditOilApprovalModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header
+        [title]="(id ? 'EditOilApproval' : 'CreateNewOilApproval') | localize"
+        (onCloseClick)="bsModalRef.hide()">
+    </abp-modal-header>
+
+    <div class="modal-body">
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="approvalName">
+                {{ 'Name' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="approvalName"
+                    id="approvalName"
+                    required
+                    maxlength="256"
+                    [(ngModel)]="approval.name"
+                    #approvalName="ngModel"
+                    #approvalNameEl />
+                <abp-validation-summary
+                    [control]="approvalName"
+                    [controlEl]="approvalNameEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="approvalDescription">
+                {{ 'Description' | localize }}
+            </label>
+            <div class="col-md-9">
+                <textarea
+                    class="form-control"
+                    name="approvalDescription"
+                    id="approvalDescription"
+                    [(ngModel)]="approval.description"
+                    #approvalDescription="ngModel"
+                    #approvalDescriptionEl
+                    rows="3">
+                </textarea>
+                <abp-validation-summary
+                    [control]="approvalDescription"
+                    [controlEl]="approvalDescriptionEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="standardType">
+                {{ 'StandardType' | localize }}
+            </label>
+            <div class="col-md-9">
+                <p-dropdown
+                    inputId="standardType"
+                    name="standardType"
+                    [options]="standardTypes"
+                    optionLabel="name"
+                    optionValue="id"
+                    [(ngModel)]="approval.standardType"
+                    [required]="true"
+                    [style]="{'width': '100%'}"
+                    placeholder="{{ 'SelectStandardType' | localize }}"
+                    #standardType="ngModel"
+                    #standardTypeEl>
+                </p-dropdown>
+                <abp-validation-summary
+                    [control]="standardType"
+                    [controlEl]="standardTypeEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+
+    </div>
+
+    <abp-modal-footer
+        [cancelDisabled]="saving"
+        [saveDisabled]="!createEditOilApprovalModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()">
+    </abp-modal-footer>
+</form>
+
