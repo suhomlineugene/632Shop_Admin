@@ -1,0 +1,15 @@
+# Copy to terraform.tfvars and fill in your values.
+# Never commit terraform.tfvars to Git — it's in .gitignore.
+
+aws_region   = "us-east-1"
+project_name = "632shop"
+environment  = "production"
+
+# Your domain, e.g. "632shop.com"
+# Leave as "" to skip custom domain — CloudFront URL will be used instead
+domain_name     = ""
+admin_subdomain = "admin"
+
+# GitHub
+github_org  = "suhomlineugene"
+admin_repo  = "632Shop_Admin"

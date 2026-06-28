@@ -1,0 +1,15 @@
+# Terraform state (may contain secrets)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Actual variable values (contain secrets)
+terraform.tfvars
+*.auto.tfvars
+
+# Crash logs
+crash.log
+
+# Generated files
+*.zip
