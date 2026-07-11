@@ -3037,6 +3037,8 @@ export class CreateEditProductDto implements ICreateEditProductDto {
     additiveType!: string | undefined;
     productType!: ProductType;
     transmissionType!: TransmissionType;
+    productCoverImage!: ProductFileDto;
+    productImages!: ProductFileDto[] | undefined;
 
     constructor(data?: ICreateEditProductDto) {
         if (data) {
@@ -3069,6 +3071,12 @@ export class CreateEditProductDto implements ICreateEditProductDto {
             this.additiveType = _data["additiveType"];
             this.productType = _data["productType"];
             this.transmissionType = _data["transmissionType"];
+            this.productCoverImage = _data["productCoverImage"] ? ProductFileDto.fromJS(_data["productCoverImage"]) : undefined as any;
+            if (Array.isArray(_data["productImages"])) {
+                this.productImages = [] as any;
+                for (let item of _data["productImages"])
+                    this.productImages!.push(ProductFileDto.fromJS(item));
+            }
         }
     }
 
@@ -3101,6 +3109,12 @@ export class CreateEditProductDto implements ICreateEditProductDto {
         data["additiveType"] = this.additiveType;
         data["productType"] = this.productType;
         data["transmissionType"] = this.transmissionType;
+        data["productCoverImage"] = this.productCoverImage ? this.productCoverImage.toJSON() : undefined as any;
+        if (Array.isArray(this.productImages)) {
+            data["productImages"] = [];
+            for (let item of this.productImages)
+                data["productImages"].push(item ? item.toJSON() : undefined as any);
+        }
         return data;
     }
 
@@ -3133,6 +3147,8 @@ export interface ICreateEditProductDto {
     additiveType: string | undefined;
     productType: ProductType;
     transmissionType: TransmissionType;
+    productCoverImage: ProductFileDto;
+    productImages: ProductFileDto[] | undefined;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
@@ -4067,6 +4083,53 @@ export interface IProductDto {
     transmissionType: TransmissionType;
 }
 
+export class ProductFileDto implements IProductFileDto {
+    fileBase64!: string | undefined;
+    fileName!: string | undefined;
+
+    constructor(data?: IProductFileDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.fileBase64 = _data["fileBase64"];
+            this.fileName = _data["fileName"];
+        }
+    }
+
+    static fromJS(data: any): ProductFileDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductFileDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["fileBase64"] = this.fileBase64;
+        data["fileName"] = this.fileName;
+        return data;
+    }
+
+    clone(): ProductFileDto {
+        const json = this.toJSON();
+        let result = new ProductFileDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IProductFileDto {
+    fileBase64: string | undefined;
+    fileName: string | undefined;
+}
+
 export enum ProductType {
     _1 = 1,
     _2 = 2,
@@ -4806,6 +4869,7 @@ export interface ITenantLoginInfoDto {
 export enum TransmissionType {
     _1 = 1,
     _2 = 2,
+    _3 = 3,
 }
 
 export class UserDto implements IUserDto {

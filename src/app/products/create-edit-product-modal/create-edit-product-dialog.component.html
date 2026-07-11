@@ -208,6 +208,34 @@
 
         <div class="form-group row">
             <label class="col-md-3 col-form-label">
+                {{ 'CoverImage' | localize }}
+            </label>
+            <div class="col-md-9">
+                <app-file-upload
+                    [multiple]="false"
+                    label="{{ 'ChooseCoverImage' | localize }}"
+                    accept="image/*"
+                    (fileChange)="product.productCoverImage = $event">
+                </app-file-upload>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                {{ 'ProductImages' | localize }}
+            </label>
+            <div class="col-md-9">
+                <app-file-upload
+                    [multiple]="true"
+                    label="{{ 'ChooseProductImages' | localize }}"
+                    accept="image/*"
+                    (filesChange)="product.productImages = $event">
+                </app-file-upload>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
                 {{ 'IsAvailable' | localize }}
             </label>
             <div class="col-md-9">
