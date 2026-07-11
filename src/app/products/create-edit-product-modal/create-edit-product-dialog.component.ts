@@ -10,6 +10,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AbpModalFooterComponent } from '@shared/components/modal/abp-modal-footer.component';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadComponent } from '@shared/components/file-upload/file-upload.component';
 
 @Component({
     templateUrl: './create-edit-product-dialog.component.html',
@@ -22,6 +23,7 @@ import { DropdownModule } from 'primeng/dropdown';
         LocalizePipe,
         AbpModalFooterComponent,
         DropdownModule,
+        FileUploadComponent,
     ],
 })
 export class CreateEditProductDialogComponent extends AppComponentBase implements OnInit {
@@ -92,4 +94,3 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
         });
     }
 }
-
