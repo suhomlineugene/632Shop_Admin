@@ -28,7 +28,7 @@ export class AccountServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     isTenantAvailable(body: IsTenantAvailableInput | undefined): Observable<IsTenantAvailableOutput> {
@@ -84,7 +84,7 @@ export class AccountServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     register(body: RegisterInput | undefined): Observable<RegisterOutput> {
@@ -210,7 +210,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getOilApprovalById(id: number | undefined): Observable<OilApprovalDto> {
@@ -266,7 +266,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     createOrEditOilApproval(body: CreateEditOilApprovalDto | undefined): Observable<number> {
@@ -311,7 +311,7 @@ export class ApprovalsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -323,7 +323,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     deleteOilApproval(id: number | undefined): Observable<void> {
@@ -491,7 +491,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getManufacturerApprovalById(id: number | undefined): Observable<ManufacturerApprovalDto> {
@@ -547,7 +547,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     createOrEditManufacturerApproval(body: CreateEditManufacturerApprovalDto | undefined): Observable<number> {
@@ -592,7 +592,7 @@ export class ApprovalsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -604,7 +604,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     deleteManufacturerApproval(id: number | undefined): Observable<void> {
@@ -726,7 +726,7 @@ export class BrandsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getById(id: number | undefined): Observable<BrandDto> {
@@ -782,7 +782,7 @@ export class BrandsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     deleteBrand(id: number | undefined): Observable<void> {
@@ -834,7 +834,7 @@ export class BrandsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     createEditBrand(body: BrandDto | undefined): Observable<number> {
@@ -879,7 +879,7 @@ export class BrandsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -903,7 +903,7 @@ export class ConfigurationServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     changeUiTheme(body: ChangeUiThemeInput | undefined): Observable<void> {
@@ -1025,7 +1025,7 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getProductById(id: number | undefined): Observable<ProductDto> {
@@ -1081,7 +1081,7 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     createOrEditProduct(body: CreateEditProductDto | undefined): Observable<number> {
@@ -1126,7 +1126,7 @@ export class ProductsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1138,7 +1138,7 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     deleteProduct(id: number | undefined): Observable<void> {
@@ -1248,7 +1248,7 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     importProductsFromFile(body: ImportProductsDto | undefined): Observable<number> {
@@ -1293,7 +1293,7 @@ export class ProductsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1317,7 +1317,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     create(body: CreateRoleDto | undefined): Observable<RoleDto> {
@@ -1373,7 +1373,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param permission (optional) 
+     * @param permission (optional)
      * @return OK
      */
     getRoles(permission: string | undefined): Observable<RoleListDtoListResultDto> {
@@ -1429,7 +1429,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     update(body: RoleDto | undefined): Observable<RoleDto> {
@@ -1485,7 +1485,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     delete(id: number | undefined): Observable<void> {
@@ -1588,7 +1588,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getRoleForEdit(id: number | undefined): Observable<GetRoleForEditOutput> {
@@ -1644,7 +1644,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     get(id: number | undefined): Observable<RoleDto> {
@@ -1700,10 +1700,10 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param keyword (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param keyword (optional)
+     * @param sorting (optional)
+     * @param skipCount (optional)
+     * @param maxResultCount (optional)
      * @return OK
      */
     getAll(keyword: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<RoleDtoPagedResultDto> {
@@ -1846,7 +1846,7 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     create(body: CreateTenantDto | undefined): Observable<TenantDto> {
@@ -1902,7 +1902,7 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     delete(id: number | undefined): Observable<void> {
@@ -1954,7 +1954,7 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     get(id: number | undefined): Observable<TenantDto> {
@@ -2010,11 +2010,11 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param keyword (optional) 
-     * @param isActive (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param keyword (optional)
+     * @param isActive (optional)
+     * @param sorting (optional)
+     * @param skipCount (optional)
+     * @param maxResultCount (optional)
      * @return OK
      */
     getAll(keyword: string | undefined, isActive: boolean | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TenantDtoPagedResultDto> {
@@ -2086,7 +2086,7 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     update(body: TenantDto | undefined): Observable<TenantDto> {
@@ -2154,7 +2154,7 @@ export class TokenAuthServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     authenticate(body: AuthenticateModel | undefined): Observable<AuthenticateResultModel> {
@@ -2222,7 +2222,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     create(body: CreateUserDto | undefined): Observable<UserDto> {
@@ -2278,7 +2278,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     update(body: UserDto | undefined): Observable<UserDto> {
@@ -2334,7 +2334,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     delete(id: number | undefined): Observable<void> {
@@ -2386,7 +2386,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     activate(body: Int64EntityDto | undefined): Observable<void> {
@@ -2438,7 +2438,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     deActivate(body: Int64EntityDto | undefined): Observable<void> {
@@ -2541,7 +2541,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     changeLanguage(body: ChangeUserLanguageDto | undefined): Observable<void> {
@@ -2593,7 +2593,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     changePassword(body: ChangePasswordDto | undefined): Observable<boolean> {
@@ -2638,7 +2638,7 @@ export class UserServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -2650,7 +2650,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     resetPassword(body: ResetPasswordDto | undefined): Observable<boolean> {
@@ -2695,7 +2695,7 @@ export class UserServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -2707,7 +2707,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     get(id: number | undefined): Observable<UserDto> {
@@ -2763,11 +2763,11 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param keyword (optional) 
-     * @param isActive (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param keyword (optional)
+     * @param isActive (optional)
+     * @param sorting (optional)
+     * @param skipCount (optional)
+     * @param maxResultCount (optional)
      * @return OK
      */
     getAll(keyword: string | undefined, isActive: boolean | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<UserDtoPagedResultDto> {
@@ -3321,6 +3321,7 @@ export class CreateEditProductDto implements ICreateEditProductDto {
     transmissionType!: TransmissionType;
     productCoverImage!: ProductFileDto;
     productImages!: ProductFileDto[] | undefined;
+    brandId!: number | undefined;
 
     constructor(data?: ICreateEditProductDto) {
         if (data) {
@@ -3359,6 +3360,7 @@ export class CreateEditProductDto implements ICreateEditProductDto {
                 for (let item of _data["productImages"])
                     this.productImages!.push(ProductFileDto.fromJS(item));
             }
+            this.brandId = _data["brandId"];
         }
     }
 
@@ -3397,6 +3399,7 @@ export class CreateEditProductDto implements ICreateEditProductDto {
             for (let item of this.productImages)
                 data["productImages"].push(item ? item.toJSON() : undefined as any);
         }
+        data["brandId"] = this.brandId;
         return data;
     }
 
@@ -3431,6 +3434,7 @@ export interface ICreateEditProductDto {
     transmissionType: TransmissionType;
     productCoverImage: ProductFileDto;
     productImages: ProductFileDto[] | undefined;
+    brandId: number | undefined;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {

@@ -4,7 +4,13 @@ import { AbpValidationSummaryComponent } from '@shared/components/validation/abp
 import { LocalizePipe } from '@shared/pipes/localize.pipe';
 import { AppComponentBase } from '@shared/app-component-base';
 import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
-import { CreateEditProductDto, DropdownDto, ProductsServiceProxy } from '@shared/service-proxies/service-proxies';
+import {
+    BrandDto,
+    BrandsServiceProxy,
+    CreateEditProductDto,
+    DropdownDto,
+    ProductsServiceProxy,
+} from '@shared/service-proxies/service-proxies';
 import { AppProductType } from '@shared/AppProductType';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AbpModalFooterComponent } from '@shared/components/modal/abp-modal-footer.component';
@@ -33,6 +39,7 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
     product = new CreateEditProductDto();
     id?: number;
     productTypes: DropdownDto[] = [];
+    brands: BrandDto[] = [];
 
     // Expose enum mapper to the template
     readonly ProductType = AppProductType;
@@ -40,6 +47,7 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
     constructor(
         injector: Injector,
         public _productService: ProductsServiceProxy,
+        public _brandService: BrandsServiceProxy,
         public bsModalRef: BsModalRef,
         private cd: ChangeDetectorRef,
     ) {
@@ -48,6 +56,7 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
 
     public ngOnInit(): void {
         this.getProductTypes();
+        this.getBrands();
 
         if (this.id) {
             this.getProduct(this.id);
@@ -70,6 +79,15 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
         });
     }
 
+    public onBrandChange(brandId: number | undefined): void {
+        const selectedBrand = this.brands.find(b => b.id === brandId);
+        if (selectedBrand) {
+            this.product.name = selectedBrand.name;
+            this.product.brandId = selectedBrand.id;
+            this.cd.markForCheck();
+        }
+    }
+
     private getProductTypes(): void {
         this._productService.getProductTypeDropdown().subscribe({
             next: (result: DropdownDto[]) => {
@@ -78,6 +96,18 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
             },
             error: () => {
                 this.notify.error(this.l('ErrorWhileLoadingProductTypes'));
+            },
+        });
+    }
+
+    private getBrands(): void {
+        this._brandService.getAll().subscribe({
+            next: (result: BrandDto[]) => {
+                this.brands = result || [];
+                this.cd.markForCheck();
+            },
+            error: () => {
+                this.notify.error(this.l('ErrorWhileLoadingBrands'));
             },
         });
     }
