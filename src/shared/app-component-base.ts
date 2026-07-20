@@ -12,6 +12,7 @@ import {
 
 import { AppSessionService } from '@shared/session/app-session.service';
 import { PrimengTableHelper } from 'shared/helpers/PrimengTableHelper';
+import { Paginator } from 'primeng/paginator';
 
 export abstract class AppComponentBase {
     localizationSourceName = AppConsts.localization.defaultLocalizationSourceName;
@@ -56,5 +57,18 @@ export abstract class AppComponentBase {
 
     isGranted(permissionName: string): boolean {
         return this.permission.isGranted(permissionName);
+    }
+
+    /**
+     * Reloads the current page of a paginated PrimeNG table.
+     * If a paginator is available, it re-triggers the current page (which fires the lazy load event).
+     * Otherwise, it falls back to the provided callback to reload the data manually.
+     */
+    protected reloadPage(paginator: Paginator | undefined, reloadCallback: () => void): void {
+        if (paginator) {
+            paginator.changePage(paginator.getPage());
+        } else {
+            reloadCallback();
+        }
     }
 }

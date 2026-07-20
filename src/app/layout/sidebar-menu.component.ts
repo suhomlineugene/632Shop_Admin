@@ -48,6 +48,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             new MenuItem(this.l('OilSpecs'), '/app/oil-specs', 'fas fa-oil-can'),
             new MenuItem(this.l('ManufacturerApprovals'), '/app/manufacturer-approvals', 'fas fa-certificate'),
             new MenuItem(this.l('ApprovalStandards'), '/app/approval-standards', 'fas fa-check-circle'),
+            new MenuItem(this.l('Brands'), '/app/brands', 'fas fa-check-circle'),
             new MenuItem(this.l('Products'), '/app/products', 'fas fa-box'),
             new MenuItem(this.l('OilApprovals'), '/app/oil-approvals', 'fas fa-stamp'),
             // new MenuItem(this.l('Roles'), '/app/roles', 'fas fa-theater-masks', 'Pages.Roles'),

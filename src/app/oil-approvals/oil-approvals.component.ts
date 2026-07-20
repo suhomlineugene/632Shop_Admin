@@ -79,7 +79,7 @@ export class OilApprovalsComponent extends AppComponentBase implements OnInit {
                 if (isConfirmed) {
                     this._approvalsService.deleteOilApproval(approval.id)
                         .subscribe(() => {
-                            this.reloadPage();
+                            this.reloadPage(this.paginator, () => this.getOilApprovals());
                             this.notify.success(this.l('SuccessfullyDeleted'));
                         });
                 }
@@ -97,7 +97,7 @@ export class OilApprovalsComponent extends AppComponentBase implements OnInit {
 
         if (dialog.content && dialog.content.onSave) {
             dialog.content.onSave.subscribe(() => {
-                this.reloadPage();
+                this.reloadPage(this.paginator, () => this.getOilApprovals());
             });
         }
     }
@@ -111,14 +111,6 @@ export class OilApprovalsComponent extends AppComponentBase implements OnInit {
         const rows = event?.rows ?? this.primengTableHelper.defaultRecordsCountPerPage;
         this.primengTableHelper.records = this._allRecords.slice(first, first + rows);
         this.cd.markForCheck();
-    }
-
-    private reloadPage(): void {
-        if (this.paginator) {
-            this.paginator.changePage(this.paginator.getPage());
-        } else {
-            this.getOilApprovals();
-        }
     }
 }
 

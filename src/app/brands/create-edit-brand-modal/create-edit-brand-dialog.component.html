@@ -1,0 +1,30 @@
+<form class="form-horizontal" autocomplete="off" #createEditBrandModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="(id ? 'EditBrand' : 'CreateNewBrand') | localize" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="name">
+                {{ 'BrandName' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="name"
+                    id="name"
+                    required
+                    maxlength="256"
+                    [(ngModel)]="brand.name"
+                    #name="ngModel"
+                    #nameEl />
+                <abp-validation-summary
+                    [control]="name"
+                    [controlEl]="nameEl"></abp-validation-summary>
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer
+        [cancelDisabled]="saving"
+        [saveDisabled]="!createEditBrandModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>
+
