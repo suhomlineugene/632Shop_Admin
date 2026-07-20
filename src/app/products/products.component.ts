@@ -89,7 +89,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
                 if (isConfirmed) {
                     this._productService.deleteProduct(product.id)
                         .subscribe(() => {
-                            this.reloadPage();
+                            this.reloadPage(this.paginator, () => this.getProducts());
                             this.notify.success(this.l('SuccessfullyDeleted'));
                         });
                 }
@@ -120,7 +120,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
 
         if (createOrEditProductDialog.content && createOrEditProductDialog.content.onSave) {
             createOrEditProductDialog.content.onSave.subscribe(() => {
-                this.reloadPage();
+                this.reloadPage(this.paginator, () => this.getProducts());
             });
         }
     }
@@ -145,14 +145,6 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
         const rows = (event?.rows) ?? this.primengTableHelper.defaultRecordsCountPerPage;
         this.primengTableHelper.records = filtered.slice(first, first + rows);
         this.cd.markForCheck();
-    }
-
-    private reloadPage(): void {
-        if (this.paginator) {
-            this.paginator.changePage(this.paginator.getPage());
-        } else {
-            this.getProducts();
-        }
     }
 }
 

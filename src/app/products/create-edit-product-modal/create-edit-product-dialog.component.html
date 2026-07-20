@@ -25,6 +25,31 @@
             </div>
         </div>
 
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="brand">
+                {{ 'Brand' | localize }}
+            </label>
+            <div class="col-md-9">
+                <p-dropdown
+                    inputId="brand"
+                    name="brand"
+                    [options]="brands"
+                    optionLabel="name"
+                    optionValue="id"
+                    [(ngModel)]="product.brandId"
+                    [showClear]="true"
+                    [style]="{'width': '100%'}"
+                    placeholder="{{ 'SelectBrand' | localize }}"
+                    (onChange)="onBrandChange($event.value)"
+                    #brand="ngModel"
+                    #brandEl>
+                </p-dropdown>
+                <abp-validation-summary
+                    [control]="brand"
+                    [controlEl]="brandEl"></abp-validation-summary>
+            </div>
+        </div>
+
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="name">
                 {{ 'ProductName' | localize }}

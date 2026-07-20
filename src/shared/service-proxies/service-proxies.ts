@@ -28,7 +28,7 @@ export class AccountServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     isTenantAvailable(body: IsTenantAvailableInput | undefined): Observable<IsTenantAvailableOutput> {
@@ -84,7 +84,7 @@ export class AccountServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     register(body: RegisterInput | undefined): Observable<RegisterOutput> {
@@ -210,7 +210,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getOilApprovalById(id: number | undefined): Observable<OilApprovalDto> {
@@ -266,7 +266,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     createOrEditOilApproval(body: CreateEditOilApprovalDto | undefined): Observable<number> {
@@ -311,7 +311,7 @@ export class ApprovalsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -323,7 +323,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     deleteOilApproval(id: number | undefined): Observable<void> {
@@ -491,7 +491,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getManufacturerApprovalById(id: number | undefined): Observable<ManufacturerApprovalDto> {
@@ -547,7 +547,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     createOrEditManufacturerApproval(body: CreateEditManufacturerApprovalDto | undefined): Observable<number> {
@@ -592,7 +592,7 @@ export class ApprovalsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -604,7 +604,7 @@ export class ApprovalsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     deleteManufacturerApproval(id: number | undefined): Observable<void> {
@@ -657,6 +657,241 @@ export class ApprovalsServiceProxy {
 }
 
 @Injectable()
+export class BrandsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return OK
+     */
+    getAll(): Observable<BrandDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Brands/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BrandDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BrandDto[]>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<BrandDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(BrandDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional)
+     * @return OK
+     */
+    getById(id: number | undefined): Observable<BrandDto> {
+        let url_ = this.baseUrl + "/api/services/app/Brands/GetById?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<BrandDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<BrandDto>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<BrandDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BrandDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional)
+     * @return OK
+     */
+    deleteBrand(id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Brands/DeleteBrand?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteBrand(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteBrand(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteBrand(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional)
+     * @return OK
+     */
+    createEditBrand(body: BrandDto | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Brands/CreateEditBrand";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateEditBrand(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateEditBrand(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreateEditBrand(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class ConfigurationServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -668,7 +903,7 @@ export class ConfigurationServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     changeUiTheme(body: ChangeUiThemeInput | undefined): Observable<void> {
@@ -790,7 +1025,7 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getProductById(id: number | undefined): Observable<ProductDto> {
@@ -846,7 +1081,7 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     createOrEditProduct(body: CreateEditProductDto | undefined): Observable<number> {
@@ -891,7 +1126,7 @@ export class ProductsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -903,7 +1138,7 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     deleteProduct(id: number | undefined): Observable<void> {
@@ -1013,7 +1248,7 @@ export class ProductsServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     importProductsFromFile(body: ImportProductsDto | undefined): Observable<number> {
@@ -1058,7 +1293,7 @@ export class ProductsServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1082,7 +1317,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     create(body: CreateRoleDto | undefined): Observable<RoleDto> {
@@ -1138,7 +1373,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param permission (optional) 
+     * @param permission (optional)
      * @return OK
      */
     getRoles(permission: string | undefined): Observable<RoleListDtoListResultDto> {
@@ -1194,7 +1429,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     update(body: RoleDto | undefined): Observable<RoleDto> {
@@ -1250,7 +1485,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     delete(id: number | undefined): Observable<void> {
@@ -1353,7 +1588,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     getRoleForEdit(id: number | undefined): Observable<GetRoleForEditOutput> {
@@ -1409,7 +1644,7 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     get(id: number | undefined): Observable<RoleDto> {
@@ -1465,10 +1700,10 @@ export class RoleServiceProxy {
     }
 
     /**
-     * @param keyword (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param keyword (optional)
+     * @param sorting (optional)
+     * @param skipCount (optional)
+     * @param maxResultCount (optional)
      * @return OK
      */
     getAll(keyword: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<RoleDtoPagedResultDto> {
@@ -1611,7 +1846,7 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     create(body: CreateTenantDto | undefined): Observable<TenantDto> {
@@ -1667,7 +1902,7 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     delete(id: number | undefined): Observable<void> {
@@ -1719,7 +1954,7 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     get(id: number | undefined): Observable<TenantDto> {
@@ -1775,11 +2010,11 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param keyword (optional) 
-     * @param isActive (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param keyword (optional)
+     * @param isActive (optional)
+     * @param sorting (optional)
+     * @param skipCount (optional)
+     * @param maxResultCount (optional)
      * @return OK
      */
     getAll(keyword: string | undefined, isActive: boolean | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TenantDtoPagedResultDto> {
@@ -1851,7 +2086,7 @@ export class TenantServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     update(body: TenantDto | undefined): Observable<TenantDto> {
@@ -1919,7 +2154,7 @@ export class TokenAuthServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     authenticate(body: AuthenticateModel | undefined): Observable<AuthenticateResultModel> {
@@ -1987,7 +2222,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     create(body: CreateUserDto | undefined): Observable<UserDto> {
@@ -2043,7 +2278,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     update(body: UserDto | undefined): Observable<UserDto> {
@@ -2099,7 +2334,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     delete(id: number | undefined): Observable<void> {
@@ -2151,7 +2386,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     activate(body: Int64EntityDto | undefined): Observable<void> {
@@ -2203,7 +2438,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     deActivate(body: Int64EntityDto | undefined): Observable<void> {
@@ -2306,7 +2541,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     changeLanguage(body: ChangeUserLanguageDto | undefined): Observable<void> {
@@ -2358,7 +2593,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     changePassword(body: ChangePasswordDto | undefined): Observable<boolean> {
@@ -2403,7 +2638,7 @@ export class UserServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -2415,7 +2650,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     resetPassword(body: ResetPasswordDto | undefined): Observable<boolean> {
@@ -2460,7 +2695,7 @@ export class UserServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null as any;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -2472,7 +2707,7 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param id (optional) 
+     * @param id (optional)
      * @return OK
      */
     get(id: number | undefined): Observable<UserDto> {
@@ -2528,11 +2763,11 @@ export class UserServiceProxy {
     }
 
     /**
-     * @param keyword (optional) 
-     * @param isActive (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param keyword (optional)
+     * @param isActive (optional)
+     * @param sorting (optional)
+     * @param skipCount (optional)
+     * @param maxResultCount (optional)
      * @return OK
      */
     getAll(keyword: string | undefined, isActive: boolean | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<UserDtoPagedResultDto> {
@@ -2771,6 +3006,53 @@ export interface IAuthenticateResultModel {
     encryptedAccessToken: string | undefined;
     expireInSeconds: number;
     userId: number;
+}
+
+export class BrandDto implements IBrandDto {
+    id!: number;
+    name!: string | undefined;
+
+    constructor(data?: IBrandDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): BrandDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new BrandDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): BrandDto {
+        const json = this.toJSON();
+        let result = new BrandDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IBrandDto {
+    id: number;
+    name: string | undefined;
 }
 
 export class ChangePasswordDto implements IChangePasswordDto {
@@ -3039,6 +3321,7 @@ export class CreateEditProductDto implements ICreateEditProductDto {
     transmissionType!: TransmissionType;
     productCoverImage!: ProductFileDto;
     productImages!: ProductFileDto[] | undefined;
+    brandId!: number | undefined;
 
     constructor(data?: ICreateEditProductDto) {
         if (data) {
@@ -3077,6 +3360,7 @@ export class CreateEditProductDto implements ICreateEditProductDto {
                 for (let item of _data["productImages"])
                     this.productImages!.push(ProductFileDto.fromJS(item));
             }
+            this.brandId = _data["brandId"];
         }
     }
 
@@ -3115,6 +3399,7 @@ export class CreateEditProductDto implements ICreateEditProductDto {
             for (let item of this.productImages)
                 data["productImages"].push(item ? item.toJSON() : undefined as any);
         }
+        data["brandId"] = this.brandId;
         return data;
     }
 
@@ -3149,6 +3434,7 @@ export interface ICreateEditProductDto {
     transmissionType: TransmissionType;
     productCoverImage: ProductFileDto;
     productImages: ProductFileDto[] | undefined;
+    brandId: number | undefined;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {

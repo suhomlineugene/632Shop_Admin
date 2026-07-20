@@ -33,6 +33,12 @@ import { AppComponent } from './app.component';
                         canActivate: [AppRouteGuard],
                     },
                     {
+                        path: 'brands',
+                        loadChildren: () => import('./brands/brands.module').then((m) => m.BrandsModule),
+                        data: { permission: 'Pages.Users' },
+                        canActivate: [AppRouteGuard],
+                    },
+                    {
                         path: 'oil-approvals',
                         loadChildren: () => import('./oil-approvals/oil-approvals.module').then((m) => m.OilApprovalsModule),
                         canActivate: [AppRouteGuard],
