@@ -69,6 +69,10 @@
                                         {{ 'Capacity' | localize }}
                                         <p-sortIcon field="capacity"></p-sortIcon>
                                     </th>
+                                    <th style="min-width: 100px" pSortableColumn="stockQuantity">
+                                        {{ 'StockQuantity' | localize }}
+                                        <p-sortIcon field="stockQuantity"></p-sortIcon>
+                                    </th>
                                     <th style="min-width: 120px" pSortableColumn="countryOfOrigin">
                                         {{ 'CountryOfOrigin' | localize }}
                                         <p-sortIcon field="countryOfOrigin"></p-sortIcon>
@@ -116,6 +120,12 @@
                                     <td>
                                         <span>
                                             {{ record.capacity }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span>
+                                            {{ record.stockQuantity }}
                                         </span>
                                     </td>
 
