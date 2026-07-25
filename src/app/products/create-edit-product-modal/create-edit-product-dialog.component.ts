@@ -104,6 +104,7 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
         this._brandService.getAll().subscribe({
             next: (result: BrandDto[]) => {
                 this.brands = result || [];
+                this.resolveBrandSelection();
                 this.cd.markForCheck();
             },
             error: () => {
@@ -116,11 +117,28 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
         this._productService.getProductById(id).subscribe({
             next: (result) => {
                 this.product = Object.assign(new CreateEditProductDto(), result);
+                this.resolveBrandSelection();
                 this.cd.markForCheck();
             },
             error: () => {
                 this.notify.error(this.l('ErrorWhileLoadingProduct'));
             },
         });
+    }
+
+    // GetProductById doesn't return the brandId, so once both the product and the
+    // brand list are loaded, resolve the selected brand by matching the product name.
+    private resolveBrandSelection(): void {
+        if (!this.id || this.product.brandId || !this.brands.length || !this.product.name) {
+            return;
+        }
+
+        const matchedBrand = this.brands.find(
+            b => b.name?.toLowerCase() === this.product.name?.toLowerCase(),
+        );
+
+        if (matchedBrand) {
+            this.product.brandId = matchedBrand.id;
+        }
     }
 }
