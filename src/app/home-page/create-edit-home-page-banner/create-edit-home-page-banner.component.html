@@ -1,0 +1,137 @@
+<form class="form-horizontal" autocomplete="off" #createEditBannerModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header
+        [title]="(mainBanner ? 'Edit Banner' : 'Create New Banner') | localize"
+        (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+
+    <div class="modal-body">
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="badgeText">
+                {{ 'Badge Text' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="badgeText"
+                    id="badgeText"
+                    maxlength="256"
+                    [(ngModel)]="banner.badgeText"
+                    #badgeText="ngModel"
+                    #badgeTextEl />
+                <abp-validation-summary
+                    [control]="badgeText"
+                    [controlEl]="badgeTextEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="title">
+                {{ 'Title' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                    type="text"
+                    class="form-control"
+                    name="title"
+                    id="title"
+                    required
+                    maxlength="256"
+                    [(ngModel)]="banner.title"
+                    #title="ngModel"
+                    #titleEl />
+                <abp-validation-summary
+                    [control]="title"
+                    [controlEl]="titleEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="description">
+                {{ 'Description' | localize }}
+            </label>
+            <div class="col-md-9">
+                <textarea
+                    class="form-control"
+                    name="description"
+                    id="description"
+                    [(ngModel)]="banner.description"
+                    #description="ngModel"
+                    #descriptionEl
+                    rows="4"></textarea>
+                <abp-validation-summary
+                    [control]="description"
+                    [controlEl]="descriptionEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                {{ 'Banner Image' | localize }}
+            </label>
+            <div class="col-md-9">
+                <div *ngIf="currentImageUrl" class="mb-3">
+                    <label class="d-block font-weight-bold mb-2">{{ 'Current Image' | localize }}</label>
+                    <img
+                        [src]="currentImageUrl"
+                        [alt]="banner.title || 'Banner image'"
+                        class="img-fluid rounded border mb-2"
+                        style="max-height: 180px;" />
+                    <div>
+                        <a [href]="currentImageUrl" target="_blank" rel="noopener noreferrer" class="text-break">
+                            {{ currentImageUrl }}
+                        </a>
+                    </div>
+                </div>
+
+                <app-file-upload
+                    [multiple]="false"
+                    label="{{ 'Choose Banner Image' | localize }}"
+                    accept="image/*"
+                    (fileChange)="onBannerImageChange($event)">
+                </app-file-upload>
+
+                <small class="text-danger d-block mt-2" *ngIf="isImageRequired">
+                    {{ 'Banner image is required' | localize }}
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                {{ 'Badge Visible' | localize }}
+            </label>
+            <div class="col-md-9">
+                <div class="checkbox">
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="isBadgeVisible"
+                            [(ngModel)]="banner.isBadgeVisible" />
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                {{ 'IsActive' | localize }}
+            </label>
+            <div class="col-md-9">
+                <div class="checkbox">
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="isActive"
+                            [(ngModel)]="banner.isActive" />
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <abp-modal-footer
+        [cancelDisabled]="saving"
+        [saveDisabled]="!createEditBannerModal.form.valid || saving || isImageRequired"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>
+
