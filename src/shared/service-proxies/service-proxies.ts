@@ -956,6 +956,214 @@ export class ConfigurationServiceProxy {
 }
 
 @Injectable()
+export class HomePageServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return OK
+     */
+    getMainBanner(): Observable<MainBannerDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/HomePage/GetMainBanner";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetMainBanner(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetMainBanner(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<MainBannerDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<MainBannerDto[]>;
+        }));
+    }
+
+    protected processGetMainBanner(response: HttpResponseBase): Observable<MainBannerDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(MainBannerDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createEditMainBanner(body: CreateEditMainBanner | undefined): Observable<MainBannerDto> {
+        let url_ = this.baseUrl + "/api/services/app/HomePage/CreateEditMainBanner";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateEditMainBanner(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateEditMainBanner(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<MainBannerDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<MainBannerDto>;
+        }));
+    }
+
+    protected processCreateEditMainBanner(response: HttpResponseBase): Observable<MainBannerDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MainBannerDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param badgeText (optional) 
+     * @param isBadgeVisible (optional) 
+     * @param title (optional) 
+     * @param description (optional) 
+     * @param imageUrl (optional) 
+     * @param isActive (optional) 
+     * @param id (optional) 
+     * @return OK
+     */
+    deleteMainBanner(badgeText: string | undefined, isBadgeVisible: boolean | undefined, title: string | undefined, description: string | undefined, imageUrl: string | undefined, isActive: boolean | undefined, id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/HomePage/DeleteMainBanner?";
+        if (badgeText === null)
+            throw new globalThis.Error("The parameter 'badgeText' cannot be null.");
+        else if (badgeText !== undefined)
+            url_ += "BadgeText=" + encodeURIComponent("" + badgeText) + "&";
+        if (isBadgeVisible === null)
+            throw new globalThis.Error("The parameter 'isBadgeVisible' cannot be null.");
+        else if (isBadgeVisible !== undefined)
+            url_ += "IsBadgeVisible=" + encodeURIComponent("" + isBadgeVisible) + "&";
+        if (title === null)
+            throw new globalThis.Error("The parameter 'title' cannot be null.");
+        else if (title !== undefined)
+            url_ += "Title=" + encodeURIComponent("" + title) + "&";
+        if (description === null)
+            throw new globalThis.Error("The parameter 'description' cannot be null.");
+        else if (description !== undefined)
+            url_ += "Description=" + encodeURIComponent("" + description) + "&";
+        if (imageUrl === null)
+            throw new globalThis.Error("The parameter 'imageUrl' cannot be null.");
+        else if (imageUrl !== undefined)
+            url_ += "ImageUrl=" + encodeURIComponent("" + imageUrl) + "&";
+        if (isActive === null)
+            throw new globalThis.Error("The parameter 'isActive' cannot be null.");
+        else if (isActive !== undefined)
+            url_ += "IsActive=" + encodeURIComponent("" + isActive) + "&";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMainBanner(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMainBanner(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMainBanner(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class ProductsServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -2839,6 +3047,275 @@ export class UserServiceProxy {
     }
 }
 
+@Injectable()
+export class VehicleSelectorServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return OK
+     */
+    getYears(): Observable<DropdownDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/VehicleSelector/GetYears";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetYears(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetYears(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<DropdownDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<DropdownDto[]>;
+        }));
+    }
+
+    protected processGetYears(response: HttpResponseBase): Observable<DropdownDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(DropdownDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param year (optional) 
+     * @return OK
+     */
+    getBrands(year: number | undefined): Observable<DropdownDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/VehicleSelector/GetBrands?";
+        if (year === null)
+            throw new globalThis.Error("The parameter 'year' cannot be null.");
+        else if (year !== undefined)
+            url_ += "year=" + encodeURIComponent("" + year) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetBrands(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetBrands(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<DropdownDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<DropdownDto[]>;
+        }));
+    }
+
+    protected processGetBrands(response: HttpResponseBase): Observable<DropdownDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(DropdownDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param year (optional) 
+     * @param brandId (optional) 
+     * @return OK
+     */
+    getModels(year: number | undefined, brandId: number | undefined): Observable<DropdownDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/VehicleSelector/GetModels?";
+        if (year === null)
+            throw new globalThis.Error("The parameter 'year' cannot be null.");
+        else if (year !== undefined)
+            url_ += "year=" + encodeURIComponent("" + year) + "&";
+        if (brandId === null)
+            throw new globalThis.Error("The parameter 'brandId' cannot be null.");
+        else if (brandId !== undefined)
+            url_ += "brandId=" + encodeURIComponent("" + brandId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetModels(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetModels(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<DropdownDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<DropdownDto[]>;
+        }));
+    }
+
+    protected processGetModels(response: HttpResponseBase): Observable<DropdownDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(DropdownDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param year (optional) 
+     * @param modelId (optional) 
+     * @return OK
+     */
+    getVariants(year: number | undefined, modelId: number | undefined): Observable<DropdownDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/VehicleSelector/GetVariants?";
+        if (year === null)
+            throw new globalThis.Error("The parameter 'year' cannot be null.");
+        else if (year !== undefined)
+            url_ += "year=" + encodeURIComponent("" + year) + "&";
+        if (modelId === null)
+            throw new globalThis.Error("The parameter 'modelId' cannot be null.");
+        else if (modelId !== undefined)
+            url_ += "modelId=" + encodeURIComponent("" + modelId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetVariants(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetVariants(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<DropdownDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<DropdownDto[]>;
+        }));
+    }
+
+    protected processGetVariants(response: HttpResponseBase): Observable<DropdownDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(DropdownDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export class ApplicationInfoDto implements IApplicationInfoDto {
     version!: string | undefined;
     releaseDate!: moment.Moment;
@@ -3186,6 +3663,73 @@ export class ChangeUserLanguageDto implements IChangeUserLanguageDto {
 
 export interface IChangeUserLanguageDto {
     languageName: string;
+}
+
+export class CreateEditMainBanner implements ICreateEditMainBanner {
+    id!: number;
+    badgeText!: string | undefined;
+    isBadgeVisible!: boolean;
+    title!: string | undefined;
+    description!: string | undefined;
+    image!: ProductFileDto;
+    isActive!: boolean;
+
+    constructor(data?: ICreateEditMainBanner) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.badgeText = _data["badgeText"];
+            this.isBadgeVisible = _data["isBadgeVisible"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.image = _data["image"] ? ProductFileDto.fromJS(_data["image"]) : undefined as any;
+            this.isActive = _data["isActive"];
+        }
+    }
+
+    static fromJS(data: any): CreateEditMainBanner {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateEditMainBanner();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["badgeText"] = this.badgeText;
+        data["isBadgeVisible"] = this.isBadgeVisible;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["image"] = this.image ? this.image.toJSON() : undefined as any;
+        data["isActive"] = this.isActive;
+        return data;
+    }
+
+    clone(): CreateEditMainBanner {
+        const json = this.toJSON();
+        let result = new CreateEditMainBanner();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateEditMainBanner {
+    id: number;
+    badgeText: string | undefined;
+    isBadgeVisible: boolean;
+    title: string | undefined;
+    description: string | undefined;
+    image: ProductFileDto;
+    isActive: boolean;
 }
 
 export class CreateEditManufacturerApprovalDto implements ICreateEditManufacturerApprovalDto {
@@ -4036,6 +4580,73 @@ export class IsTenantAvailableOutput implements IIsTenantAvailableOutput {
 export interface IIsTenantAvailableOutput {
     state: TenantAvailabilityState;
     tenantId: number | undefined;
+}
+
+export class MainBannerDto implements IMainBannerDto {
+    id!: number;
+    badgeText!: string | undefined;
+    isBadgeVisible!: boolean;
+    title!: string | undefined;
+    description!: string | undefined;
+    imageUrl!: string | undefined;
+    isActive!: boolean;
+
+    constructor(data?: IMainBannerDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.badgeText = _data["badgeText"];
+            this.isBadgeVisible = _data["isBadgeVisible"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.imageUrl = _data["imageUrl"];
+            this.isActive = _data["isActive"];
+        }
+    }
+
+    static fromJS(data: any): MainBannerDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MainBannerDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["badgeText"] = this.badgeText;
+        data["isBadgeVisible"] = this.isBadgeVisible;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["imageUrl"] = this.imageUrl;
+        data["isActive"] = this.isActive;
+        return data;
+    }
+
+    clone(): MainBannerDto {
+        const json = this.toJSON();
+        let result = new MainBannerDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IMainBannerDto {
+    id: number;
+    badgeText: string | undefined;
+    isBadgeVisible: boolean;
+    title: string | undefined;
+    description: string | undefined;
+    imageUrl: string | undefined;
+    isActive: boolean;
 }
 
 export class ManufacturerApprovalDto implements IManufacturerApprovalDto {
