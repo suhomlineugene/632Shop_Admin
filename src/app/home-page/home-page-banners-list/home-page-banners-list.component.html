@@ -37,7 +37,7 @@
                                     <th style="min-width: 120px">{{ 'Badge Visible' | localize }}</th>
                                     <th style="min-width: 160px">{{ 'Title' | localize }}</th>
                                     <th style="min-width: 240px">{{ 'Description' | localize }}</th>
-                                    <th style="min-width: 240px">{{ 'Image Url' | localize }}</th>
+                                    <th style="min-width: 240px">{{ 'Image' | localize }}</th>
                                     <th style="min-width: 110px">{{ 'IsActive' | localize }}</th>
                                     <th style="min-width: 150px">{{ 'Actions' | localize }}</th>
                                 </tr>
@@ -57,9 +57,6 @@
                                                     [src]="record.imageUrl"
                                                     [alt]="record.title || 'Banner image'"
                                                     class="banner-thumbnail mr-2" />
-                                                <a [href]="record.imageUrl" target="_blank" rel="noopener noreferrer" class="text-break">
-                                                    {{ record.imageUrl }}
-                                                </a>
                                             </div>
                                         </ng-container>
                                         <ng-template #noImage>-</ng-template>

@@ -55,7 +55,7 @@ export class HomePageBannersListComponent implements OnInit {
 
         this.primengTableHelper.showLoadingIndicator();
 
-        this._homePageService.getMainBanner()
+        this._homePageService.getAllMainBanners()
             .pipe(finalize(() => {
                 Promise.resolve().then(() => {
                     this.primengTableHelper.hideLoadingIndicator();
