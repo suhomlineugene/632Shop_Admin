@@ -9,7 +9,10 @@ import {
     BrandsServiceProxy,
     CreateEditProductDto,
     DropdownDto,
+    EngineOilViscosityDto,
     ProductsServiceProxy,
+    TransmissionOilViscosityDto,
+    ViscositiesServiceProxy,
 } from '@shared/service-proxies/service-proxies';
 import { AppProductType } from '@shared/AppProductType';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -40,6 +43,8 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
     id?: number;
     productTypes: DropdownDto[] = [];
     brands: BrandDto[] = [];
+    engineViscosities: EngineOilViscosityDto[] = [];
+    transmissionViscosities: TransmissionOilViscosityDto[] = [];
 
     // Expose enum mapper to the template
     readonly ProductType = AppProductType;
@@ -48,6 +53,7 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
         injector: Injector,
         public _productService: ProductsServiceProxy,
         public _brandService: BrandsServiceProxy,
+        public _viscositiesService: ViscositiesServiceProxy,
         public bsModalRef: BsModalRef,
         private cd: ChangeDetectorRef,
     ) {
@@ -60,6 +66,17 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
 
         if (this.id) {
             this.getProduct(this.id);
+        }
+    }
+
+    public onProductTypeChange(): void {
+        this.product.viscosityId = undefined;
+        this.product.transmissionViscosityId = undefined;
+
+        if (this.product.productType == this.ProductType.MotorOil && !this.engineViscosities.length) {
+            this.getEngineViscosities();
+        } else if (this.product.productType == this.ProductType.TransmissionFluid && !this.transmissionViscosities.length) {
+            this.getTransmissionViscosities();
         }
     }
 
@@ -118,10 +135,43 @@ export class CreateEditProductDialogComponent extends AppComponentBase implement
             next: (result) => {
                 this.product = Object.assign(new CreateEditProductDto(), result);
                 this.resolveBrandSelection();
+                this.loadViscositiesForCurrentProductType();
                 this.cd.markForCheck();
             },
             error: () => {
                 this.notify.error(this.l('ErrorWhileLoadingProduct'));
+            },
+        });
+    }
+
+    private loadViscositiesForCurrentProductType(): void {
+        if (this.product.productType == this.ProductType.MotorOil) {
+            this.getEngineViscosities();
+        } else if (this.product.productType == this.ProductType.TransmissionFluid) {
+            this.getTransmissionViscosities();
+        }
+    }
+
+    private getEngineViscosities(): void {
+        this._viscositiesService.getEngineViscositiesList().subscribe({
+            next: (result: EngineOilViscosityDto[]) => {
+                this.engineViscosities = result || [];
+                this.cd.markForCheck();
+            },
+            error: () => {
+                this.notify.error(this.l('ErrorWhileLoadingViscosities'));
+            },
+        });
+    }
+
+    private getTransmissionViscosities(): void {
+        this._viscositiesService.getTransmissionViscositiesList().subscribe({
+            next: (result: TransmissionOilViscosityDto[]) => {
+                this.transmissionViscosities = result || [];
+                this.cd.markForCheck();
+            },
+            error: () => {
+                this.notify.error(this.l('ErrorWhileLoadingViscosities'));
             },
         });
     }

@@ -16,6 +16,7 @@
                     [required]="true"
                     [style]="{'width': '100%'}"
                     placeholder="{{ 'SelectProductType' | localize }}"
+                    (onChange)="onProductTypeChange()"
                     #productType="ngModel"
                     #productTypeEl>
                 </p-dropdown>
@@ -179,14 +180,19 @@
                 {{ 'Viscosity' | localize }}
             </label>
             <div class="col-md-9">
-                <input
-                    type="text"
-                    class="form-control"
+                <p-dropdown
+                    inputId="viscosity"
                     name="viscosity"
-                    id="viscosity"
-                    [(ngModel)]="product.viscosity"
+                    [options]="engineViscosities"
+                    optionLabel="name"
+                    optionValue="id"
+                    [(ngModel)]="product.viscosityId"
+                    [showClear]="true"
+                    [style]="{'width': '100%'}"
+                    placeholder="{{ 'SelectViscosity' | localize }}"
                     #viscosity="ngModel"
-                    #viscosityEl />
+                    #viscosityEl>
+                </p-dropdown>
                 <abp-validation-summary
                     [control]="viscosity"
                     [controlEl]="viscosityEl"></abp-validation-summary>
@@ -219,14 +225,19 @@
                 {{ 'TransmissionViscosity' | localize }}
             </label>
             <div class="col-md-9">
-                <input
-                    type="text"
-                    class="form-control"
+                <p-dropdown
+                    inputId="transmissionViscosity"
                     name="transmissionViscosity"
-                    id="transmissionViscosity"
-                    [(ngModel)]="product.transmissionViscosity"
+                    [options]="transmissionViscosities"
+                    optionLabel="name"
+                    optionValue="id"
+                    [(ngModel)]="product.transmissionViscosityId"
+                    [showClear]="true"
+                    [style]="{'width': '100%'}"
+                    placeholder="{{ 'SelectViscosity' | localize }}"
                     #transmissionViscosity="ngModel"
-                    #transmissionViscosityEl />
+                    #transmissionViscosityEl>
+                </p-dropdown>
                 <abp-validation-summary
                     [control]="transmissionViscosity"
                     [controlEl]="transmissionViscosityEl"></abp-validation-summary>

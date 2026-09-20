@@ -3367,6 +3367,464 @@ export class VehicleSelectorServiceProxy {
     }
 }
 
+@Injectable()
+export class ViscositiesServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return OK
+     */
+    getEngineViscositiesList(): Observable<EngineOilViscosityDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Viscosities/GetEngineViscositiesList";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEngineViscositiesList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEngineViscositiesList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EngineOilViscosityDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EngineOilViscosityDto[]>;
+        }));
+    }
+
+    protected processGetEngineViscositiesList(response: HttpResponseBase): Observable<EngineOilViscosityDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EngineOilViscosityDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getTransmissionViscositiesList(): Observable<TransmissionOilViscosityDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Viscosities/GetTransmissionViscositiesList";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTransmissionViscositiesList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTransmissionViscositiesList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TransmissionOilViscosityDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TransmissionOilViscosityDto[]>;
+        }));
+    }
+
+    protected processGetTransmissionViscositiesList(response: HttpResponseBase): Observable<TransmissionOilViscosityDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(TransmissionOilViscosityDto.fromJS(item));
+            }
+            else {
+                result200 = null as any;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createEditEngineViscosity(body: CreateEditEngineOilViscosityDto | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Viscosities/CreateEditEngineViscosity";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateEditEngineViscosity(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateEditEngineViscosity(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreateEditEngineViscosity(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createEditTransmissionViscosity(body: CreateEditTransmissionOilViscosityDto | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Viscosities/CreateEditTransmissionViscosity";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateEditTransmissionViscosity(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateEditTransmissionViscosity(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreateEditTransmissionViscosity(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    deleteEngineViscosity(id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Viscosities/DeleteEngineViscosity?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteEngineViscosity(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteEngineViscosity(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteEngineViscosity(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    deleteTransmissionViscosity(id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Viscosities/DeleteTransmissionViscosity?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteTransmissionViscosity(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteTransmissionViscosity(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteTransmissionViscosity(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    getEngineViscosityById(id: number | undefined): Observable<EngineOilViscosityDto> {
+        let url_ = this.baseUrl + "/api/services/app/Viscosities/GetEngineViscosityById?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEngineViscosityById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEngineViscosityById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EngineOilViscosityDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EngineOilViscosityDto>;
+        }));
+    }
+
+    protected processGetEngineViscosityById(response: HttpResponseBase): Observable<EngineOilViscosityDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EngineOilViscosityDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    getTransmissionViscosityById(id: number | undefined): Observable<TransmissionOilViscosityDto> {
+        let url_ = this.baseUrl + "/api/services/app/Viscosities/GetTransmissionViscosityById?";
+        if (id === null)
+            throw new globalThis.Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTransmissionViscosityById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTransmissionViscosityById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TransmissionOilViscosityDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TransmissionOilViscosityDto>;
+        }));
+    }
+
+    protected processGetTransmissionViscosityById(response: HttpResponseBase): Observable<TransmissionOilViscosityDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TransmissionOilViscosityDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export class ApplicationInfoDto implements IApplicationInfoDto {
     version!: string | undefined;
     releaseDate!: moment.Moment;
@@ -3716,6 +4174,53 @@ export interface IChangeUserLanguageDto {
     languageName: string;
 }
 
+export class CreateEditEngineOilViscosityDto implements ICreateEditEngineOilViscosityDto {
+    id!: number;
+    name!: string | undefined;
+
+    constructor(data?: ICreateEditEngineOilViscosityDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): CreateEditEngineOilViscosityDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateEditEngineOilViscosityDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): CreateEditEngineOilViscosityDto {
+        const json = this.toJSON();
+        let result = new CreateEditEngineOilViscosityDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateEditEngineOilViscosityDto {
+    id: number;
+    name: string | undefined;
+}
+
 export class CreateEditMainBanner implements ICreateEditMainBanner {
     id!: number;
     badgeText!: string | undefined;
@@ -3909,9 +4414,9 @@ export class CreateEditProductDto implements ICreateEditProductDto {
     capacity!: string | undefined;
     countryOfOrigin!: string | undefined;
     brandId!: number;
-    viscosity!: string | undefined;
+    viscosityId!: number | undefined;
     coolantApproval!: string | undefined;
-    transmissionViscosity!: string | undefined;
+    transmissionViscosityId!: number | undefined;
     additiveType!: string | undefined;
     stockQuantity!: number;
     productType!: ProductType;
@@ -3945,9 +4450,9 @@ export class CreateEditProductDto implements ICreateEditProductDto {
             this.capacity = _data["capacity"];
             this.countryOfOrigin = _data["countryOfOrigin"];
             this.brandId = _data["brandId"];
-            this.viscosity = _data["viscosity"];
+            this.viscosityId = _data["viscosityId"];
             this.coolantApproval = _data["coolantApproval"];
-            this.transmissionViscosity = _data["transmissionViscosity"];
+            this.transmissionViscosityId = _data["transmissionViscosityId"];
             this.additiveType = _data["additiveType"];
             this.stockQuantity = _data["stockQuantity"];
             this.productType = _data["productType"];
@@ -3985,9 +4490,9 @@ export class CreateEditProductDto implements ICreateEditProductDto {
         data["capacity"] = this.capacity;
         data["countryOfOrigin"] = this.countryOfOrigin;
         data["brandId"] = this.brandId;
-        data["viscosity"] = this.viscosity;
+        data["viscosityId"] = this.viscosityId;
         data["coolantApproval"] = this.coolantApproval;
-        data["transmissionViscosity"] = this.transmissionViscosity;
+        data["transmissionViscosityId"] = this.transmissionViscosityId;
         data["additiveType"] = this.additiveType;
         data["stockQuantity"] = this.stockQuantity;
         data["productType"] = this.productType;
@@ -4025,15 +4530,62 @@ export interface ICreateEditProductDto {
     capacity: string | undefined;
     countryOfOrigin: string | undefined;
     brandId: number;
-    viscosity: string | undefined;
+    viscosityId: number | undefined;
     coolantApproval: string | undefined;
-    transmissionViscosity: string | undefined;
+    transmissionViscosityId: number | undefined;
     additiveType: string | undefined;
     stockQuantity: number;
     productType: ProductType;
     transmissionType: TransmissionType;
     productCoverImage: ProductFileDto;
     productImages: ProductFileDto[] | undefined;
+}
+
+export class CreateEditTransmissionOilViscosityDto implements ICreateEditTransmissionOilViscosityDto {
+    id!: number;
+    name!: string | undefined;
+
+    constructor(data?: ICreateEditTransmissionOilViscosityDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): CreateEditTransmissionOilViscosityDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateEditTransmissionOilViscosityDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): CreateEditTransmissionOilViscosityDto {
+        const json = this.toJSON();
+        let result = new CreateEditTransmissionOilViscosityDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateEditTransmissionOilViscosityDto {
+    id: number;
+    name: string | undefined;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
@@ -4280,6 +4832,53 @@ export class DropdownDto implements IDropdownDto {
 }
 
 export interface IDropdownDto {
+    id: number;
+    name: string | undefined;
+}
+
+export class EngineOilViscosityDto implements IEngineOilViscosityDto {
+    id!: number;
+    name!: string | undefined;
+
+    constructor(data?: IEngineOilViscosityDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): EngineOilViscosityDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EngineOilViscosityDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): EngineOilViscosityDto {
+        const json = this.toJSON();
+        let result = new EngineOilViscosityDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IEngineOilViscosityDto {
     id: number;
     name: string | undefined;
 }
@@ -4929,11 +5528,13 @@ export class ProductDto implements IProductDto {
     description!: string | undefined;
     price!: number;
     isAvailable!: boolean;
+    brandId!: number;
     capacity!: string | undefined;
     countryOfOrigin!: string | undefined;
     stockQuantity!: number;
     productType!: ProductType;
-    viscosity!: string | undefined;
+    viscosityId!: number | undefined;
+    transmissionViscosityId!: number | undefined;
     coolantApproval!: string | undefined;
     transmissionViscosity!: string | undefined;
     additiveType!: string | undefined;
@@ -4962,11 +5563,13 @@ export class ProductDto implements IProductDto {
             this.description = _data["description"];
             this.price = _data["price"];
             this.isAvailable = _data["isAvailable"];
+            this.brandId = _data["brandId"];
             this.capacity = _data["capacity"];
             this.countryOfOrigin = _data["countryOfOrigin"];
             this.stockQuantity = _data["stockQuantity"];
             this.productType = _data["productType"];
-            this.viscosity = _data["viscosity"];
+            this.viscosityId = _data["viscosityId"];
+            this.transmissionViscosityId = _data["transmissionViscosityId"];
             this.coolantApproval = _data["coolantApproval"];
             this.transmissionViscosity = _data["transmissionViscosity"];
             this.additiveType = _data["additiveType"];
@@ -4995,11 +5598,13 @@ export class ProductDto implements IProductDto {
         data["description"] = this.description;
         data["price"] = this.price;
         data["isAvailable"] = this.isAvailable;
+        data["brandId"] = this.brandId;
         data["capacity"] = this.capacity;
         data["countryOfOrigin"] = this.countryOfOrigin;
         data["stockQuantity"] = this.stockQuantity;
         data["productType"] = this.productType;
-        data["viscosity"] = this.viscosity;
+        data["viscosityId"] = this.viscosityId;
+        data["transmissionViscosityId"] = this.transmissionViscosityId;
         data["coolantApproval"] = this.coolantApproval;
         data["transmissionViscosity"] = this.transmissionViscosity;
         data["additiveType"] = this.additiveType;
@@ -5028,11 +5633,13 @@ export interface IProductDto {
     description: string | undefined;
     price: number;
     isAvailable: boolean;
+    brandId: number;
     capacity: string | undefined;
     countryOfOrigin: string | undefined;
     stockQuantity: number;
     productType: ProductType;
-    viscosity: string | undefined;
+    viscosityId: number | undefined;
+    transmissionViscosityId: number | undefined;
     coolantApproval: string | undefined;
     transmissionViscosity: string | undefined;
     additiveType: string | undefined;
@@ -5819,6 +6426,53 @@ export class TenantLoginInfoDto implements ITenantLoginInfoDto {
 export interface ITenantLoginInfoDto {
     id: number;
     tenancyName: string | undefined;
+    name: string | undefined;
+}
+
+export class TransmissionOilViscosityDto implements ITransmissionOilViscosityDto {
+    id!: number;
+    name!: string | undefined;
+
+    constructor(data?: ITransmissionOilViscosityDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): TransmissionOilViscosityDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TransmissionOilViscosityDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): TransmissionOilViscosityDto {
+        const json = this.toJSON();
+        let result = new TransmissionOilViscosityDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITransmissionOilViscosityDto {
+    id: number;
     name: string | undefined;
 }
 
