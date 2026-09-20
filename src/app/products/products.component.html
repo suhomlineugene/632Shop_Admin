@@ -93,9 +93,9 @@
                                         {{ 'AdditiveType' | localize }}
                                         <p-sortIcon field="additiveType"></p-sortIcon>
                                     </th>
-                                    <th style="min-width: 100px" pSortableColumn="isActive">
-                                        {{ 'IsActive' | localize }}
-                                        <p-sortIcon field="isActive"></p-sortIcon>
+                                    <th style="min-width: 100px" pSortableColumn="isAvailable">
+                                        {{ 'IsAvailable' | localize }}
+                                        <p-sortIcon field="isAvailable"></p-sortIcon>
                                     </th>
                                     <th style="min-width: 130px">
                                         {{ 'Actions' | localize }}
@@ -161,7 +161,7 @@
 
                                     <td>
                                         <span>
-                                            {{ record.isActive ? ('Yes' | localize) : ('No' | localize) }}
+                                            {{ record.isAvailable ? ('Yes' | localize) : ('No' | localize) }}
                                         </span>
                                     </td>
 

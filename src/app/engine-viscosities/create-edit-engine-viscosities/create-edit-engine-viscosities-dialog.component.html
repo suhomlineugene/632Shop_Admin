@@ -1,0 +1,22 @@
+<form class="form-horizontal" autocomplete="off" #createEditEngineViscosityModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="(id ? 'EditEngineViscosity' : 'CreateNewEngineViscosity') | localize" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+
+<div class="modal-body">
+    <div class="form-group">
+        <label>{{ 'Name' | localize }}</label>
+        <input
+            class="form-control"
+            required
+            [(ngModel)]="viscosity.name"
+            name="name"
+            #name="ngModel"
+            #nameEl />
+        <abp-validation-summary [control]="name" [controlEl]="nameEl"></abp-validation-summary>
+    </div>
+</div>
+
+    <abp-modal-footer
+        [cancelDisabled]="saving"
+        [saveDisabled]="!createEditEngineViscosityModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

@@ -49,10 +49,20 @@ import { AppComponent } from './app.component';
                         canActivate: [AppRouteGuard],
                     },
                     {
+                        path: 'engine-viscosities',
+                        loadChildren: () => import('./engine-viscosities/engine-viscosities.module').then((m) => m.EngineViscositiesModule),
+                        canActivate: [AppRouteGuard],
+                    },
+                    {
+                        path: 'transmission-viscosities',
+                        loadChildren: () => import('./transmission-viscosities/transmission-viscosities.module').then((m) => m.TransmissionViscositiesModule),
+                        canActivate: [AppRouteGuard],
+                    },
+                    {
                         path: 'manufacturer-approvals',
                         loadChildren: () => import('./manufacturer-approvals/manufacturer-approvals.module').then((m) => m.ManufacturerApprovalsModule),
                         canActivate: [AppRouteGuard],
-                    },
+                    }, 
                     {
                         path: 'roles',
                         loadChildren: () => import('./roles/roles.module').then((m) => m.RolesModule),
